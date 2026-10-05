@@ -1,9 +1,9 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# CareProtocol-Redesign project guidance
 
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+- This checkout is the private, independent copy. Work only in this repository; do not change or deploy the live CareProtocol website or push to another repository.
+- Stack: Next.js 14.2, React 18, TypeScript, Tailwind CSS 3. Preserve these versions unless a required security fix or user request justifies a change.
+- Before changing Next.js behavior, read the version-matched guide in `node_modules/next/dist/docs/` if it exists. This package may omit bundled docs; if so, use the official Next.js v14 documentation.
+- Preserve the real browser-side MediaPipe camera flow and the real, user-signed Solana Devnet memo flow. Clearly label estimates and never represent a simulated or failed transaction as verified.
+- The current source does not implement doctor/hospital workflows, FHIR, or a clinical AI service. Do not add fake controls or claim these features exist.
+- Keep camera permission user-initiated, stop all media tracks when the session ends, and do not send camera frames to a server.
+- Do not add patient-identifying data to the public Devnet memo. The signed proof should stay limited to the existing summary fields and hash.

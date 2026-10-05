@@ -1,41 +1,49 @@
-HEAD
 # CareProtocol
-Sau ca phẫu thuật, hành trình hồi phục thực sự bắt đầu khi bệnh nhân về nhà. Bác sĩ phẫu thuật thường xuyên rơi vào tình trạng quá tải, không thể đồng hành sát sao 24/7. Về phía bệnh viện và bảo hiểm, hiện hoàn toàn thiếu công cụ xác minh bệnh nhân có tuân thủ phục hồi hay không mà không xâm phạm dữ liệu hình ảnh nhạy cảm.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+CareProtocol là prototype hỗ trợ theo dõi một bài tập phục hồi đầu gối sau phẫu thuật. MediaPipe xử lý khung hình trong trình duyệt để ước tính góc gối và đếm số lần tập. Người dùng có thể chọn ký một bản ghi tóm tắt bằng Phantom trên Solana Devnet.
 
-## Getting Started
+Đây là bản sao phát triển riêng trong repo `CareProtocol-Redesign`; website demo và repo nguồn không được dùng làm đích ghi/deploy.
 
-First, run the development server:
+## Chạy trên máy
+
+Yêu cầu Node.js 18 trở lên, trình duyệt hiện đại có webcam và kết nối mạng để tải MediaPipe.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Mở `http://localhost:3000`. Camera chỉ được bật sau khi người dùng bấm **Bắt đầu tập** và cấp quyền.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Solana Devnet (tùy chọn)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Kết nối Phantom đang ở Devnet nếu muốn ghi nhận phiên tập. RPC mặc định là public Devnet; có thể đặt `NEXT_PUBLIC_SOLANA_RPC_URL` trong `.env.local` để dùng RPC riêng. Không đưa private key vào biến `NEXT_PUBLIC_*`.
 
-## Learn More
+Nếu ví thiếu SOL Devnet, nút xin SOL trong ứng dụng gọi airdrop Devnet; yêu cầu có thể bị giới hạn. Giao dịch chỉ được hiển thị thành công sau khi RPC xác nhận và có liên kết Solana Explorer.
 
-To learn more about Next.js, take a look at the following resources:
+## Luồng hiện có
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Xem hướng dẫn bài tập và mục tiêu 10 lần.
+2. Tải mô hình PoseLandmarker, cho phép camera và tập theo phản hồi trực tiếp.
+3. Khi hoàn thành, xem số lần và điểm kỹ thuật ước tính.
+4. Tùy chọn kết nối Phantom, xin SOL Devnet và ký check-in.
+5. Mở giao dịch trên Explorer; các phiên đã xác nhận được lưu trong local storage của trình duyệt hiện tại.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Quyền riêng tư và giới hạn
 
-## Deploy on Vercel
+- Ảnh/video camera được xử lý trong trình duyệt; ứng dụng không upload video.
+- Giao dịch memo trên Devnet công khai wallet address cùng mã bài tập, số lần, điểm ước tính, thời điểm và hash. Không ghi tên, bệnh án, ảnh hay video lên chain.
+- Điểm kỹ thuật và góc khớp là ước tính từ prototype, chưa được xác nhận lâm sàng và không nên dùng để tự chẩn đoán hoặc điều chỉnh phác đồ.
+- Ứng dụng không có đăng nhập bệnh nhân, lưu trữ hồ sơ bệnh viện, bác sĩ/Tele-ICU, FHIR hay AI lâm sàng trong source hiện tại.
+- Dùng dữ liệu demo; không nhập thông tin nhận dạng hoặc dữ liệu sức khỏe thật.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Công nghệ
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
->>>>>>> 8899a5a (feat: complete MVP)
+- Next.js 14.2, React 18, TypeScript và Tailwind CSS 3
+- MediaPipe Tasks Vision chạy phía trình duyệt
+- Phantom Wallet Adapter và Solana Web3.js
+- SPL Memo Program trên Solana Devnet để lưu hash và số liệu phiên
+
+## Nguồn tham khảo
+
+Repo này phát triển độc lập từ source CareProtocol-Web trong tài khoản chủ repo. Các thay đổi ở đây không cập nhật website demo hoặc repo của Andrew.
